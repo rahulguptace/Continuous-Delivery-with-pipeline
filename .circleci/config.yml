@@ -1,10 +1,13 @@
 version: 2.1
+orbs:
+  aws-cli: circleci/aws-cli@3.1
+  nodeimg: circleci/node:13.8.0
 
 jobs:
   define_file:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
     docker:
-      - image: circleci/node:13.8.0
+      - image: nodeimg
     # Add steps to the job
     working_directory: /tmp
     steps:
@@ -18,16 +21,24 @@ jobs:
   print_output_file:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
     docker:
-      - image: circleci/node:13.8.0
+      - image: aws-cli
     # Add steps to the job
     working_directory: /tmp
     steps:
+      - checkout
       - attach_workspace:
           at: .
-      - run: aws ec2 describe-instances \
-                --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                --filters "Name=tag:Project,Values=udacity" \
-                --output text >> inventory
+      - aws-cli/setup:
+          profile_name: default
+      - aws-cli/role_arn_setup:
+          profile_name: new-profile
+          role_arn: arn:aws:iam::750123031425:role/EMR_EC2_DefaultRole
+          source_profile: default
+      - run: |
+          aws ec2 describe-instances 
+          query 'Reservations[*].Instances[*].PublicIpAddress' 
+          filters "Name=tag:Project,Values=udacity" 
+          output text >> inventory
       - run: cat inventory
 
 # Orchestrate jobs using workflows
