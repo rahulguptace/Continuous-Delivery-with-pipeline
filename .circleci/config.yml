@@ -19,8 +19,7 @@ jobs:
 
   print_output_file:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
-    docker:
-      - image: aws-cli/default
+    executor: aws-cli/default
     # Add steps to the job
     working_directory: /tmp
     steps:
