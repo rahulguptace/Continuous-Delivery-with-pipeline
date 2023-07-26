@@ -11,11 +11,11 @@ jobs:
     working_directory: /tmp
     steps:
       - run: touch inventory
-      - run: echo "[all]" > inventory
+      - run: echo "[all]" > inventory.txt
       - persist_to_workspace:
           root: .
           paths:
-            - inventory
+            - inventory.txt
 
   print_output_file:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
@@ -31,8 +31,8 @@ jobs:
           aws-region: AWS_REGION_NAME
       - run: aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' 
           --filters "Name=tag:Project,Values=udacity" 
-          --output text >> inventory
-      - run: cat inventory
+          --output text >> inventory.txt
+      - run: cat inventory.txt
 
 # Orchestrate jobs using workflows
 workflows:
