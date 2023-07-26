@@ -7,10 +7,11 @@ jobs:
   define_file:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
     docker:
-      - image: nodeimg
+      - image: nodeimg/default
     # Add steps to the job
     working_directory: /tmp
     steps:
+      - checkout
       - run: touch inventory
       - run: echo "[all]" > inventory
       - persist_to_workspace:
@@ -21,7 +22,7 @@ jobs:
   print_output_file:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
     docker:
-      - image: aws-cli
+      - image: aws-cli/default
     # Add steps to the job
     working_directory: /tmp
     steps:
@@ -29,11 +30,9 @@ jobs:
       - attach_workspace:
           at: .
       - aws-cli/setup:
-          profile_name: default
-      - aws-cli/role_arn_setup:
-          profile_name: new-profile
-          role_arn: arn:aws:iam::750123031425:role/EMR_EC2_DefaultRole
-          source_profile: default
+          aws-access-key-id: AWS_ACCESS_KEY
+          aws-secret-access-key: AWS_ACCESS_SECRET
+          aws-region: AWS_REGION_NAME
       - run: |
           aws ec2 describe-instances 
           query 'Reservations[*].Instances[*].PublicIpAddress' 
