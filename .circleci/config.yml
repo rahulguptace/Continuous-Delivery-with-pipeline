@@ -29,8 +29,8 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY
           aws-secret-access-key: AWS_ACCESS_SECRET
           aws-region: AWS_REGION_NAME
-      - run: aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' \
-          --filters "Name=tag:Project,Values=udacity" \
+      - run: aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' 
+          --filters "Name=tag:Project,Values=udacity" 
           --output text >> inventory
       - run: cat inventory
 
