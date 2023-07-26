@@ -10,7 +10,6 @@ jobs:
     # Add steps to the job
     working_directory: /tmp
     steps:
-      - checkout
       - run: touch inventory
       - run: echo "[all]" > inventory
       - persist_to_workspace:
@@ -25,7 +24,6 @@ jobs:
     # Add steps to the job
     working_directory: /tmp
     steps:
-      - checkout
       - attach_workspace:
           at: .
       - aws-cli/setup:
