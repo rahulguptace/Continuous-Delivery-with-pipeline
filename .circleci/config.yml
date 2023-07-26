@@ -31,8 +31,8 @@ jobs:
           aws-region: AWS_REGION_NAME
       - run: aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' 
           --filters "Name=tag:Project,Values=udacity" 
-          --output text > output.txt
-      - run: cat output.txt
+          --output text >> inventory.txt
+      - run: cat inventory.txt
 
 # Orchestrate jobs using workflows
 workflows:
